@@ -2,22 +2,56 @@ package com.example.pipe.persistencia;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
+    private Button btnGrabar, btnLeer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        btnGrabar =(Button)findViewById(R.id.btnGrabar);
+        btnLeer=(Button)findViewById(R.id.btnLeer);
+
+        btnGrabar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences preferencias = getSharedPreferences("datos", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editarPreferencias = preferencias.edit();
+                editarPreferencias.putString("usuario","strobl");
+                editarPreferencias.putString("clave","no viene a clases");
+                editarPreferencias.putBoolean("guilty", false);
+                editarPreferencias.commit();
+            }
+        });
+
+        btnLeer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences preferecias = getSharedPreferences("datos",Context.MODE_PRIVATE);
+                Map<String,?> keys = preferecias.getAll();
+                for(Map.Entry<String,?> entry : keys.entrySet()){
+                    //entry.getKey();
+                    Log.d("TAG_", entry.getKey() + " -> " + entry.getValue().toString());
+                }
+
+            }
+        });
 
 
     }
